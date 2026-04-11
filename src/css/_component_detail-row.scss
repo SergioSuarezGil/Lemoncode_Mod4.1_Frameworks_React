@@ -1,0 +1,25 @@
+@use "./variables" as *;
+
+.detail-row {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.8rem 0.95rem;
+  border: 0.05rem solid rgba($color-primary, 0.12);
+  border-radius: 0.85rem;
+  background: rgba($color-primary, 0.04);
+
+  &__term {
+    margin: 0;
+    color: $color-primary-dark;
+    font-size: 0.85em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__definition {
+    margin: 0;
+    color: $text-color;
+    font-size: 1em;
+  }
+}

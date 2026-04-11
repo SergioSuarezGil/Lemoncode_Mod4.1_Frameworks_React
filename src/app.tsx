@@ -5,9 +5,9 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { LoginPage } from "./login";
-import { ListPage } from "./list";
-import { DetailPage } from "./detail";
+import { LoginPage } from "./pages/login-page";
+import { ListPage } from "./pages/list-page";
+import { DetailPage } from "./pages/detail-page";
 
 export const App = () => {
   return (
