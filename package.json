@@ -1,5 +1,6 @@
 {
   "name": "hello-vite",
+  "description": "Módulo 4.1- Frameworks - React",
   "private": true,
   "version": "0.0.0",
   "type": "module",
