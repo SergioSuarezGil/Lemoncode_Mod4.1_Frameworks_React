@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Pagination } from "@mui/material";
-import { GitHubMember } from "../types/github-member";
-import { GitHubMemberRow } from "./github-member-row";
+import { PaginationControl } from "../common";
+import { GitHubMember } from "../../types/github";
+import { MemberRow } from "./member-row";
 
-interface GitHubMembersListProps {
+interface MembersListProps {
   members: GitHubMember[];
   currentPage: number;
   totalPages: number;
@@ -11,7 +11,7 @@ interface GitHubMembersListProps {
   onPageChange: (_event: React.ChangeEvent<unknown>, page: number) => void;
 }
 
-export const GitHubMembersList: React.FC<GitHubMembersListProps> = ({
+export const MembersList: React.FC<MembersListProps> = ({
   members,
   currentPage,
   totalPages,
@@ -29,7 +29,7 @@ export const GitHubMembersList: React.FC<GitHubMembersListProps> = ({
 
         <div className="github-members__rows">
           {members.map((member) => (
-            <GitHubMemberRow
+            <MemberRow
               key={member.id}
               member={member}
               searchQuery={searchQuery}
@@ -38,16 +38,11 @@ export const GitHubMembersList: React.FC<GitHubMembersListProps> = ({
         </div>
       </div>
 
-      {totalPages > 1 && (
-        <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
-          <Pagination
-            page={currentPage}
-            count={totalPages}
-            color="primary"
-            onChange={onPageChange}
-          />
-        </Box>
-      )}
+      <PaginationControl
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+      />
     </>
   );
 };

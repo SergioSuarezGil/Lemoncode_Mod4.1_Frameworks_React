@@ -1,27 +1,24 @@
 import React from "react";
+import { Box } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Pagination,
-  Paper,
-  TextField,
-  Typography
-} from "@mui/material";
-import { Link as RouterLink, useSearchParams } from "react-router-dom";
-import { RickCharacterDetail } from "../components/rick-character-detail";
-import { RickCharacterList } from "../components/rick-character-list";
-import { useDebounce } from "../hooks/use-debounce";
-import { getRickAndMortyCharacters } from "../services/rick-and-morty.service";
-import { RickAndMortyCharacter } from "../types/rick-and-morty-character";
+  CharacterDetail,
+  CharacterList,
+  CharacterSearch,
+  PageHeader
+} from "../../components/rick-and-morty";
+import { PageFeedback, PaginationControl } from "../../components/common";
+import { useDebounce, useQueryPage } from "../../hooks/common";
+import { getRickAndMortyCharacters } from "../../services/rick-and-morty";
+import { RickAndMortyCharacter } from "../../types/rick-and-morty";
 
-export const RickAndMortyPage: React.FC = () => {
+export const CharactersPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { currentPage, setPage } = useQueryPage({
+    searchParams,
+    setSearchParams
+  });
   const queryFromUrl = searchParams.get("q") ?? "";
-  const pageFromUrl = Number(searchParams.get("page") ?? "1");
-  const currentPage =
-    Number.isNaN(pageFromUrl) || pageFromUrl < 1 ? 1 : pageFromUrl;
   const normalizedQuery = queryFromUrl.trim();
 
   const [searchInput, setSearchInput] = React.useState(queryFromUrl);
@@ -112,74 +109,44 @@ export const RickAndMortyPage: React.FC = () => {
     _event: React.ChangeEvent<unknown>,
     page: number
   ) => {
-    const nextParams: Record<string, string> = { page: String(page) };
-
-    if (normalizedQuery) {
-      nextParams.q = normalizedQuery;
-    }
-
-    setSearchParams(nextParams);
+    const extraParams = normalizedQuery ? { q: normalizedQuery } : {};
+    setPage(page, extraParams);
   };
 
   const showEmptyState = !isLoading && !errorMessage && characters.length === 0;
 
   return (
     <Box className="rick-page">
-      <div className="rick-page__header">
-        <Typography variant="h4" component="h1">
-          Personajes de Rick y Morty
-        </Typography>
-        <Button component={RouterLink} to="/list" variant="outlined">
-          Volver a GitHub
-        </Button>
-      </div>
+      <PageHeader />
 
-      <Paper className="rick-page__search-panel">
-        <TextField
-          fullWidth
-          label="Buscar personaje"
-          placeholder="Ejemplo: Rick, Morty, Summer"
-          value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
-        />
-      </Paper>
+      <CharacterSearch searchInput={searchInput} onChange={setSearchInput} />
 
-      {isLoading && (
-        <div className="rick-page__feedback">
-          <CircularProgress size={20} />
-          <Typography>Cargando personajes...</Typography>
-        </div>
-      )}
-
-      {errorMessage && (
-        <Alert severity="error" className="rick-page__alert">
-          {errorMessage}
-        </Alert>
-      )}
-      {showEmptyState && (
-        <Alert severity="info" className="rick-page__alert">
-          No se encontraron personajes para esta búsqueda.
-        </Alert>
-      )}
+      <PageFeedback
+        isLoading={isLoading}
+        loadingText="Cargando personajes..."
+        errorMessage={errorMessage}
+        showEmptyState={showEmptyState}
+        emptyMessage="No se encontraron personajes para esta búsqueda."
+        loadingClassName="rick-page__feedback"
+        alertClassName="rick-page__alert"
+      />
 
       <div className="rick-page__layout">
-        <RickCharacterList
+        <CharacterList
           characters={characters}
           selectedCharacterId={selectedCharacter?.id}
           onSelectCharacter={handleSelectCharacter}
         />
-        <RickCharacterDetail character={selectedCharacter} />
+        <CharacterDetail character={selectedCharacter} />
       </div>
 
-      {characters.length > 0 && totalPages > 1 && (
-        <div className="rick-page__pagination">
-          <Pagination
-            page={currentPage}
-            count={totalPages}
-            color="primary"
-            onChange={handlePageChange}
-          />
-        </div>
+      {characters.length > 0 && (
+        <PaginationControl
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          className="rick-page__pagination"
+        />
       )}
     </Box>
   );

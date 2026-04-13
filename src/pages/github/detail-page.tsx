@@ -1,8 +1,8 @@
 import React from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { DetailRow } from "../components/detail-row";
-import { getGitHubUserDetail } from "../services/github-user-detail.service";
-import { GitHubUserDetail } from "../types/github-user-detail";
+import { DetailRow } from "../../components/github";
+import { getGitHubUserDetail } from "../../services/github";
+import { GitHubUserDetail } from "../../types/github";
 
 export const DetailPage: React.FC = () => {
   const { id } = useParams();
@@ -45,6 +45,7 @@ export const DetailPage: React.FC = () => {
     loadUserDetail();
   }, [login]);
 
+  // Es la mejor manera que se me ha ocurrido para evitar repetir el código de creación de filas :=)
   const detailRows = userDetail
     ? [
         { label: "Usuario", value: userDetail.login },
@@ -93,7 +94,7 @@ export const DetailPage: React.FC = () => {
 
               <div className="detail-page__actions">
                 <Link className="detail-page__link" to={backToListPath}>
-                  Back to list page
+                  Volver a la lista
                 </Link>
               </div>
             </div>

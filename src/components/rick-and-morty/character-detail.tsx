@@ -1,14 +1,24 @@
 import React from "react";
 import { Avatar, Card, CardContent, Typography } from "@mui/material";
-import { RickAndMortyCharacter } from "../types/rick-and-morty-character";
+import { RickAndMortyCharacter } from "../../types/rick-and-morty";
 
-interface RickCharacterDetailProps {
+interface CharacterDetailProps {
   character: RickAndMortyCharacter | null;
 }
 
-export const RickCharacterDetail: React.FC<RickCharacterDetailProps> = ({
+export const CharacterDetail: React.FC<CharacterDetailProps> = ({
   character
 }) => {
+  const detailRows = character
+    ? [
+        { label: "Estado", value: character.status },
+        { label: "Especie", value: character.species },
+        { label: "Genero", value: character.gender },
+        { label: "Origen", value: character.origin.name },
+        { label: "Ubicacion", value: character.location.name }
+      ]
+    : [];
+
   return (
     <Card className="rick-character-detail">
       <CardContent>
@@ -24,21 +34,11 @@ export const RickCharacterDetail: React.FC<RickCharacterDetailProps> = ({
               className="rick-character-detail__avatar"
             />
             <Typography variant="h5">{character.name}</Typography>
-            <Typography>
-              <strong>Estado:</strong> {character.status}
-            </Typography>
-            <Typography>
-              <strong>Especie:</strong> {character.species}
-            </Typography>
-            <Typography>
-              <strong>Genero:</strong> {character.gender}
-            </Typography>
-            <Typography>
-              <strong>Origen:</strong> {character.origin.name}
-            </Typography>
-            <Typography>
-              <strong>Ubicacion:</strong> {character.location.name}
-            </Typography>
+            {detailRows.map((row) => (
+              <Typography key={row.label}>
+                <strong>{row.label}:</strong> {row.value}
+              </Typography>
+            ))}
           </div>
         )}
       </CardContent>

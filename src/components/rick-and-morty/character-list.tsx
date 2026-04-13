@@ -7,15 +7,15 @@ import {
   ListItemText,
   Paper
 } from "@mui/material";
-import { RickAndMortyCharacter } from "../types/rick-and-morty-character";
+import { RickAndMortyCharacter } from "../../types/rick-and-morty";
 
-interface RickCharacterListProps {
+interface CharacterListProps {
   characters: RickAndMortyCharacter[];
   selectedCharacterId?: number;
   onSelectCharacter: (character: RickAndMortyCharacter) => void;
 }
 
-export const RickCharacterList: React.FC<RickCharacterListProps> = ({
+export const CharacterList: React.FC<CharacterListProps> = ({
   characters,
   selectedCharacterId,
   onSelectCharacter

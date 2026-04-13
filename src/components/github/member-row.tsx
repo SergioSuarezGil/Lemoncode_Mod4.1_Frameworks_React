@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { GitHubMember } from "../types/github-member";
+import { GitHubMember } from "../../types/github";
 
-interface GitHubMemberRowProps {
+interface MemberRowProps {
   member: GitHubMember;
   searchQuery: string;
 }
 
-export const GitHubMemberRow: React.FC<GitHubMemberRowProps> = ({
+export const MemberRow: React.FC<MemberRowProps> = ({
   member,
   searchQuery
 }) => {

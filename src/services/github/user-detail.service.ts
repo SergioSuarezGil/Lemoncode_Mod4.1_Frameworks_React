@@ -1,4 +1,4 @@
-import { GitHubUserDetail } from "../types/github-user-detail";
+import { GitHubUserDetail } from "../../types/github";
 
 const GITHUB_API_BASE_URL =
   import.meta.env.VITE_GITHUB_API_BASE_URL ?? "https://api.github.com";

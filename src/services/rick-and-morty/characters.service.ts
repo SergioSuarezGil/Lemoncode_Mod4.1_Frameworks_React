@@ -1,7 +1,7 @@
 import {
   RickAndMortyCharacter,
   RickAndMortyCharactersResponse
-} from "../types/rick-and-morty-character";
+} from "../../types/rick-and-morty";
 
 const RICK_AND_MORTY_API_URL =
   import.meta.env.VITE_RICK_AND_MORTY_API_URL ??
