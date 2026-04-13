@@ -1,6 +1,7 @@
 import { GitHubUserDetail } from "../types/github-user-detail";
 
-const GITHUB_API_BASE_URL = "https://api.github.com";
+const GITHUB_API_BASE_URL =
+  import.meta.env.VITE_GITHUB_API_BASE_URL ?? "https://api.github.com";
 
 export const getGitHubUserDetail = async (
   login: string

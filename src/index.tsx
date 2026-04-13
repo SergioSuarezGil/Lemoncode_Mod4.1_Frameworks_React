@@ -5,7 +5,7 @@ import "./css/styles.scss";
 
 const container = document.getElementById("root");
 if (!container) {
-	throw new Error("No se encontro el elemento root en el DOM");
+  throw new Error("No se encontro el elemento root en el DOM");
 }
 
 const root = createRoot(container);

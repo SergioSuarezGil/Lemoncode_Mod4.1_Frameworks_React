@@ -9,7 +9,7 @@ interface GitHubMemberRowProps {
 
 export const GitHubMemberRow: React.FC<GitHubMemberRowProps> = ({
   member,
-  searchQuery,
+  searchQuery
 }) => {
   const detailPath = `/detail/${member.login}${searchQuery}`;
 

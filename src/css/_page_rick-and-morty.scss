@@ -1,0 +1,52 @@
+@use "./variables" as *;
+
+.rick-page {
+  max-width: 72rem;
+  margin: 2rem auto;
+  padding: 1rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__search-panel {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__feedback {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__alert {
+    margin-bottom: 1rem;
+  }
+
+  &__layout {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  &__pagination {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 56rem) {
+  .rick-page {
+    &__layout {
+      flex-direction: column;
+    }
+  }
+}

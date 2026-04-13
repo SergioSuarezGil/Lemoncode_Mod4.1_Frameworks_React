@@ -1,12 +1,13 @@
 import { GitHubMember } from "../types/github-member";
 
-const GITHUB_API_BASE_URL = "https://api.github.com";
+const GITHUB_API_BASE_URL =
+  import.meta.env.VITE_GITHUB_API_BASE_URL ?? "https://api.github.com";
 
 export const getOrganizationMembers = async (
   organization: string
 ): Promise<GitHubMember[]> => {
   const response = await fetch(
-    `${GITHUB_API_BASE_URL}/orgs/${encodeURIComponent(organization)}/members`
+    `${GITHUB_API_BASE_URL}/orgs/${encodeURIComponent(organization)}/members?per_page=100`
   );
 
   if (!response.ok) {

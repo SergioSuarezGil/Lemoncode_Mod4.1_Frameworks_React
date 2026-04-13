@@ -1,23 +1,44 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
-import { GitHubMemberRow } from "../components/github-member-row";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography
+} from "@mui/material";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
+import { GitHubMembersList } from "../components/github-members-list";
 import { GitHubMember } from "../types/github-member";
 import { getOrganizationMembers } from "../services/github-members.service";
 
 const DEFAULT_ORGANIZATION = "lemoncode";
+const MEMBERS_PER_PAGE = 10;
 
 export const ListPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const organizationFromUrl = searchParams.get("org")?.trim() || DEFAULT_ORGANIZATION;
+  const organizationFromUrl =
+    searchParams.get("org")?.trim() || DEFAULT_ORGANIZATION;
+  const pageFromUrl = Number(searchParams.get("page") ?? "1");
+  const currentPage =
+    Number.isNaN(pageFromUrl) || pageFromUrl < 1 ? 1 : pageFromUrl;
   const organizationUrl = `https://github.com/orgs/${organizationFromUrl}/people`;
   const detailSearchQuery = searchParams.toString();
 
   const [members, setMembers] = React.useState<GitHubMember[]>([]);
-  const [organizationInput, setOrganizationInput] = React.useState<string>(organizationFromUrl);
+  const [organizationInput, setOrganizationInput] =
+    React.useState<string>(organizationFromUrl);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState<string>("");
   const hasError = errorMessage !== "";
   const hasMembers = members.length > 0;
+  const totalPages = Math.max(1, Math.ceil(members.length / MEMBERS_PER_PAGE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const pageStartIndex = (safeCurrentPage - 1) * MEMBERS_PER_PAGE;
+  const visibleMembers = members.slice(
+    pageStartIndex,
+    pageStartIndex + MEMBERS_PER_PAGE
+  );
   const showMembersTable = !isLoading && !hasError && hasMembers;
   const showEmptyState = !isLoading && !hasError && !hasMembers;
 
@@ -31,7 +52,8 @@ export const ListPage: React.FC = () => {
       setErrorMessage("");
 
       try {
-        const responseMembers = await getOrganizationMembers(organizationFromUrl);
+        const responseMembers =
+          await getOrganizationMembers(organizationFromUrl);
         setMembers(responseMembers);
       } catch (error) {
         setMembers([]);
@@ -48,6 +70,22 @@ export const ListPage: React.FC = () => {
     loadMembers();
   }, [organizationFromUrl]);
 
+  React.useEffect(() => {
+    if (!hasMembers) {
+      return;
+    }
+
+    if (currentPage > totalPages) {
+      setSearchParams({ org: organizationFromUrl, searched: "1", page: "1" });
+    }
+  }, [
+    currentPage,
+    hasMembers,
+    organizationFromUrl,
+    setSearchParams,
+    totalPages
+  ]);
+
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -58,30 +96,66 @@ export const ListPage: React.FC = () => {
       return;
     }
 
-    setSearchParams({ org: normalizedOrganization, searched: "1" });
+    setSearchParams({ org: normalizedOrganization, searched: "1", page: "1" });
+  };
+
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setSearchParams({
+      org: organizationFromUrl,
+      searched: "1",
+      page: String(page)
+    });
   };
 
   return (
     <section className="github-members">
-      <h2 className="github-members__title">Miembros de GitHub</h2>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 2
+        }}
+      >
+        <h2 className="github-members__title">Miembros de GitHub</h2>
+        <Button variant="outlined" component={RouterLink} to="/rick-and-morty">
+          Rick and Morty
+        </Button>
+      </Box>
 
       <form className="github-members__filters" onSubmit={handleSearch}>
-        <label className="github-members__label" htmlFor="organization">
-          Organización:
-        </label>
-        <input
+        <Typography
+          className="github-members__label"
+          component="label"
+          htmlFor="organization"
+        >
+          Organización
+        </Typography>
+        <TextField
           id="organization"
-          className="github-members__input"
+          size="small"
+          placeholder="Ejemplo: lemoncode"
           value={organizationInput}
           onChange={(event) => setOrganizationInput(event.target.value)}
         />
-        <button className="github-members__button" type="submit">
+        <Button
+          className="github-members__button"
+          type="submit"
+          variant="contained"
+        >
           Buscar
-        </button>
+        </Button>
       </form>
 
       <p className="github-members__status">
-        Organización actual: <span className="github-members__status-value">{organizationFromUrl}</span>
+        Organización actual:{" "}
+        <span className="github-members__status-value">
+          {organizationFromUrl}
+        </span>
         {!errorMessage ? (
           <a
             className="github-members__status-link"
@@ -89,45 +163,37 @@ export const ListPage: React.FC = () => {
             target="_blank"
             rel="noreferrer"
           >
-            # Abrir en GitHub
+            # Abrir en GitHub
           </a>
         ) : null}
       </p>
 
       {isLoading && (
-        <p className="github-members__feedback">Cargando miembros...</p>
+        <Box
+          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          className="github-members__feedback"
+        >
+          <CircularProgress size={20} />
+          <span>Cargando miembros...</span>
+        </Box>
       )}
 
-      {hasError && (
-        <p className="github-members__feedback github-members__feedback--error">
-          {errorMessage}
-        </p>
-      )}
+      {hasError && <Alert severity="error">{errorMessage}</Alert>}
 
       {showEmptyState && (
-        <p className="github-members__feedback">
+        <Alert severity="info">
           Esta organización no tiene miembros públicos.
-        </p>
+        </Alert>
       )}
 
       {showMembersTable && (
-        <div className="github-members__table">
-          <div className="github-members__grid github-members__grid--header">
-            <span className="github-members__header">Avatar</span>
-            <span className="github-members__header">Id</span>
-            <span className="github-members__header">Nombre</span>
-          </div>
-
-          <div className="github-members__rows">
-            {members.map((member) => (
-              <GitHubMemberRow
-                key={member.id}
-                member={member}
-                searchQuery={detailSearchQuery ? `?${detailSearchQuery}` : ""}
-              />
-            ))}
-          </div>
-        </div>
+        <GitHubMembersList
+          members={visibleMembers}
+          currentPage={safeCurrentPage}
+          totalPages={totalPages}
+          searchQuery={detailSearchQuery ? `?${detailSearchQuery}` : ""}
+          onPageChange={handlePageChange}
+        />
       )}
     </section>
   );

@@ -13,11 +13,16 @@
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0 0 auto 0;
     height: 0.35rem;
-    background: linear-gradient(90deg, $color-primary, $color-primary-light, #60a5fa);
+    background: linear-gradient(
+      90deg,
+      $color-primary,
+      $color-primary-light,
+      #60a5fa
+    );
   }
 
   &__title {
