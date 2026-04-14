@@ -8,7 +8,7 @@ import {
   PageHeader
 } from "../../components/rick-and-morty";
 import { PageFeedback, PaginationControl } from "../../components/common";
-import { useDebounce, useQueryPage } from "../../hooks/common";
+import { useAsyncStatus, useDebounce, useQueryPage } from "../../hooks/common";
 import { getRickAndMortyCharacters } from "../../services/rick-and-morty";
 import { RickAndMortyCharacter } from "../../types/rick-and-morty";
 
@@ -20,6 +20,7 @@ export const CharactersPage: React.FC = () => {
   });
   const queryFromUrl = searchParams.get("q") ?? "";
   const normalizedQuery = queryFromUrl.trim();
+  const { isLoading, errorMessage, run } = useAsyncStatus();
 
   const [searchInput, setSearchInput] = React.useState(queryFromUrl);
   const [characters, setCharacters] = React.useState<RickAndMortyCharacter[]>(
@@ -28,8 +29,6 @@ export const CharactersPage: React.FC = () => {
   const [selectedCharacterId, setSelectedCharacterId] = React.useState<
     number | null
   >(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
   const [totalPages, setTotalPages] = React.useState(1);
 
   const debouncedSearch = useDebounce(searchInput, 500);
@@ -56,31 +55,22 @@ export const CharactersPage: React.FC = () => {
 
   React.useEffect(() => {
     const loadCharacters = async () => {
-      setIsLoading(true);
-      setErrorMessage("");
+      const response = await run(() =>
+        getRickAndMortyCharacters(normalizedQuery, currentPage)
+      );
 
-      try {
-        const response = await getRickAndMortyCharacters(
-          normalizedQuery,
-          currentPage
-        );
-        setCharacters(response.characters);
-        setTotalPages(response.totalPages);
-      } catch (error) {
+      if (!response) {
         setCharacters([]);
         setTotalPages(1);
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Se produjo un error inesperado."
-        );
-      } finally {
-        setIsLoading(false);
+        return;
       }
+
+      setCharacters(response.characters);
+      setTotalPages(response.totalPages);
     };
 
     loadCharacters();
-  }, [currentPage, normalizedQuery]);
+  }, [currentPage, normalizedQuery, run]);
 
   React.useEffect(() => {
     if (!characters.length) {

@@ -1,0 +1,12 @@
+@use "./variables" as *;
+
+.orders-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.orders-page__description {
+  margin: 0;
+  color: rgba(18, 48, 79, 0.9);
+}

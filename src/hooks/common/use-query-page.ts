@@ -18,7 +18,8 @@ export const useQueryPage = ({
   paramName = "page"
 }: UseQueryPageParams): UseQueryPageResult => {
   const pageFromUrl = Number(searchParams.get(paramName) ?? "1");
-  const currentPage = Number.isNaN(pageFromUrl) || pageFromUrl < 1 ? 1 : pageFromUrl;
+  const currentPage =
+    Number.isNaN(pageFromUrl) || pageFromUrl < 1 ? 1 : pageFromUrl;
 
   const setPage = React.useCallback(
     (page: number, extraParams: Record<string, string> = {}) => {

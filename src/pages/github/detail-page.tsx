@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { BackHomeButton } from "../../components/common";
 import { DetailRow } from "../../components/github";
 import { getGitHubUserDetail } from "../../services/github";
 import { GitHubUserDetail } from "../../types/github";
@@ -58,6 +59,10 @@ export const DetailPage: React.FC = () => {
 
   return (
     <section className="detail-page">
+      <div className="detail-page__topbar">
+        <BackHomeButton />
+      </div>
+
       <div className="detail-page__card">
         <h2 className="detail-page__title">Detalle del usuario</h2>
 

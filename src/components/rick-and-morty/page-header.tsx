@@ -1,16 +1,18 @@
 import React from "react";
-import { Button, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Typography } from "@mui/material";
+import { BackHomeButton } from "../common";
 
 export const PageHeader: React.FC = () => {
   return (
     <div className="rick-page__header">
-      <Typography variant="h4" component="h1">
-        Personajes de Rick y Morty
-      </Typography>
-      <Button component={RouterLink} to="/list" variant="outlined">
-        Volver a GitHub
-      </Button>
+      <div className="rick-page__header-content">
+        <Typography variant="h4" component="h1">
+          Personajes de Rick y Morty
+        </Typography>
+        <div className="rick-page__actions">
+          <BackHomeButton label="Volver" />
+        </div>
+      </div>
     </div>
   );
 };

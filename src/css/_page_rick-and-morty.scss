@@ -5,13 +5,29 @@
   margin: 2rem auto;
   padding: 1rem;
 
-  &__header {
+  &__topbar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 0.9rem;
+  }
+
+  &__header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+  }
+
+  &__header {
     margin-bottom: 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
   }
 
   &__search-panel {
@@ -45,6 +61,11 @@
 
 @media (max-width: 56rem) {
   .rick-page {
+    &__header-content {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
     &__layout {
       flex-direction: column;
     }

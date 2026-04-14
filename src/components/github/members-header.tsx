@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Box } from "@mui/material";
+import { BackHomeButton } from "../common";
 
 export const MembersHeader: React.FC = () => {
   return (
@@ -14,9 +14,11 @@ export const MembersHeader: React.FC = () => {
       }}
     >
       <h2 className="github-members__title">Miembros de GitHub</h2>
-      <Button variant="outlined" component={RouterLink} to="/rick-and-morty">
-        Rick and Morty
-      </Button>
+      <Box
+        sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}
+      >
+        <BackHomeButton />
+      </Box>
     </Box>
   );
 };

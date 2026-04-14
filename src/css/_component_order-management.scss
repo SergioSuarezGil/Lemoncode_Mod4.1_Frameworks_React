@@ -1,0 +1,89 @@
+@use "./variables" as *;
+
+.order-header {
+  border: 0.05rem solid $color-card-border;
+  border-radius: 1rem;
+}
+
+.order-header__content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.order-header__fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.order-header__summary-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.order-header__highlight-input {
+  min-width: 10rem;
+}
+
+.order-header__highlight-input .MuiOutlinedInput-root {
+  background: rgba(15, 108, 189, 0.06);
+}
+
+.order-header__highlight-input .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(15, 108, 189, 0.45);
+}
+
+.order-header__summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.order-lines-table {
+  border: 0.05rem solid $color-card-border;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.order-lines-table__actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.order-lines-table .MuiTableHead-root {
+  background: rgba(15, 108, 189, 0.06);
+}
+
+.order-lines-table .MuiTableCell-head {
+  font-weight: 700;
+}
+
+.order-lines-table .MuiTableRow-root:nth-of-type(even) {
+  background: rgba(15, 108, 189, 0.04);
+}
+
+.order-line-row__amount {
+  min-width: 7rem;
+}
+
+.order-line-row__amount-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.order-line-row__currency {
+  font-weight: 700;
+  color: $text-color;
+}
+
+@media (max-width: 48rem) {
+  .order-header__content {
+    flex-direction: column;
+  }
+}

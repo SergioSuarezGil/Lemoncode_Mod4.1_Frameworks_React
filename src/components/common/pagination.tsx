@@ -19,7 +19,10 @@ export const PaginationControl: React.FC<PaginationControlProps> = ({
   }
 
   return (
-    <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }} className={className}>
+    <Box
+      sx={{ mt: 2, display: "flex", justifyContent: "center" }}
+      className={className}
+    >
       <Pagination
         page={currentPage}
         count={totalPages}

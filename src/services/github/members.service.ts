@@ -17,7 +17,9 @@ const getTotalPagesFromLinkHeader = (
     return currentPageSize === 0 ? 1 : currentPage;
   }
 
-  const lastPageMatch = linkHeader.match(/<[^>]*[?&]page=(\d+)[^>]*>;\s*rel="last"/);
+  const lastPageMatch = linkHeader.match(
+    /<[^>]*[?&]page=(\d+)[^>]*>;\s*rel="last"/
+  );
 
   if (lastPageMatch) {
     return Number(lastPageMatch[1]);

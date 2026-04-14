@@ -5,6 +5,12 @@
   margin: 2rem auto;
   padding: 1.5rem;
 
+  &__topbar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+  }
+
   &__card {
     background: $color-card-background;
     border: 0.05rem solid $color-card-border;

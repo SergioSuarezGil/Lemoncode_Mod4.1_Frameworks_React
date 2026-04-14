@@ -11,7 +11,7 @@ import { PageFeedback } from "../../components/common";
 import { GitHubMember } from "../../types/github";
 import { getOrganizationMembers } from "../../services/github";
 import { useOrganization } from "../../context";
-import { useQueryPage } from "../../hooks/common";
+import { useAsyncStatus, useQueryPage } from "../../hooks/common";
 
 const MEMBERS_PER_PAGE = 10;
 
@@ -23,44 +23,34 @@ export const ListPage: React.FC = () => {
     setSearchParams
   });
   const detailSearchQuery = searchParams.toString();
+  const { isLoading, errorMessage, run } = useAsyncStatus();
 
   const [members, setMembers] = React.useState<GitHubMember[]>([]);
   const [totalPages, setTotalPages] = React.useState<number>(1);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = React.useState<string>("");
   const hasError = errorMessage !== "";
   const hasMembers = members.length > 0;
   const showMembersTable = !isLoading && !hasError && hasMembers;
-  const showEmptyState = !isLoading && !hasError && !hasMembers && currentPage === 1;
+  const showEmptyState =
+    !isLoading && !hasError && !hasMembers && currentPage === 1;
 
   React.useEffect(() => {
     const loadMembers = async () => {
-      setIsLoading(true);
-      setErrorMessage("");
+      const response = await run(() =>
+        getOrganizationMembers(organization, currentPage, MEMBERS_PER_PAGE)
+      );
 
-      try {
-        const response = await getOrganizationMembers(
-          organization,
-          currentPage,
-          MEMBERS_PER_PAGE
-        );
-        setMembers(response.members);
-        setTotalPages(response.totalPages);
-      } catch (error) {
+      if (!response) {
         setMembers([]);
         setTotalPages(1);
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Se produjo un error inesperado."
-        );
-      } finally {
-        setIsLoading(false);
+        return;
       }
+
+      setMembers(response.members);
+      setTotalPages(response.totalPages);
     };
 
     loadMembers();
-  }, [currentPage, organization]);
+  }, [currentPage, organization, run]);
 
   React.useEffect(() => {
     if (currentPage > totalPages) {

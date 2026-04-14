@@ -2,7 +2,12 @@
 @use "./base";
 @use "./page_github-members";
 @use "./page_auth-page";
+@use "./page_main-menu";
 @use "./page_detail-page";
 @use "./page_rick-and-morty";
+@use "./page_orders-list";
+@use "./page_order-management";
 @use "./component_detail-row";
 @use "./component_rick-and-morty";
+@use "./component_shop";
+@use "./component_order-management";
